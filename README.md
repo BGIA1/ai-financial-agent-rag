@@ -1,7 +1,7 @@
 # 🏦 AI Financial Compliance Agent (RAG) 🤖
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat&logo=python&logoColor=white)
-![LangChain](https://img.shields.io/badge/LangChain-v0.3-1C3C3C?style=flat&logo=langchain&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Latest-1C3C3C?style=flat&logo=langchain&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/Model-GPT--4o-412991?style=flat&logo=openai&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Production_Ready-success)
 
