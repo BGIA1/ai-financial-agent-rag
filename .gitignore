@@ -1,0 +1,31 @@
+# --- 1. SEGURIDAD ---
+.env
+.env.local
+.streamlit/secrets.toml
+*.pem
+*.key
+
+# --- 2. Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- 3. Entornos Virtuales ---
+venv/
+.venv/
+env/
+
+# --- 4. Jupyter ---
+.ipynb_checkpoints/
+
+# --- 5. OS ---
+.DS_Store
+Thumbs.db
+
+# --- 6. Build ---
+build/
+dist/
+*.egg-info/
+
+# --- 7. Vector DB
+chroma_db/
