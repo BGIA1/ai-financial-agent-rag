@@ -1,70 +1,80 @@
 # 🏦 AI Financial Compliance Agent (RAG) 🤖
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat&logo=python&logoColor=white)
-![LangChain](https://img.shields.io/badge/LangChain-Latest-1C3C3C?style=flat&logo=langchain&logoColor=white)
-![OpenAI](https://img.shields.io/badge/Model-GPT--4o-412991?style=flat&logo=openai&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Production_Ready-success)
+![AWS](https://img.shields.io/badge/AWS-EC2-232F3E?style=flat&logo=amazon-aws&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Frontend-Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-v0.1-1C3C3C?style=flat&logo=langchain&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Deployed-success)
 
 > **Automatización inteligente para el análisis de riesgo crediticio y cumplimiento normativo (AML/KYC).**
 
-Este repositorio contiene la implementación de un **Agente Autónomo** capaz de interpretar manuales bancarios no estructurados (PDF), extraer reglas de negocio complejas (tablas de tasas, excepciones) y ejecutar validaciones de seguridad financiera.
+Este repositorio contiene la implementación de un **Agente Autónomo** desplegado en producción, capaz de interpretar manuales bancarios no estructurados (PDF), extraer reglas de negocio complejas y ejecutar validaciones de seguridad financiera en tiempo real.
 
 ---
 
-## 🚀 Acceso Rápido (Demo)
+## 🚀 Demo en Vivo (AWS Cloud)
 
-Este proyecto está diseñado para ejecutarse en la nube. Haz clic en el botón de abajo para interactuar con el agente en un entorno aislado.
+El agente se encuentra desplegado en una instancia **AWS EC2 (t3.small)** y es accesible públicamente vía web.
 
-| Notebook | Visualizar en Colab (Recomendado) | Descripción |
+| Plataforma | Link de Acceso | Estado |
 | :--- | :--- | :--- |
-| **1. Agente** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BGIA1/ai-financial-agent-rag/blob/main/notebooks/AI_Credit_Compliance_Agent_DummyBank.ipynb) | Pipeline completo: Ingesta, RAG híbrido y Lógica de Agente. |
+| **🌐 Web App (Streamlit)** | [**👉 Abrir Asistente Financiero**](http://3.144.71.18:8501) | 🟢 Online |
+| **📓 Notebook (Código)** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/BGIA1/ai-financial-agent-rag/blob/main/notebooks/AI_Credit_Compliance_Agent_DummyBank.ipynb) | Investigación |
 
-> **Nota:** Se requiere una API Key de OpenAI para ejecutar las celdas de inferencia.
+> **⚠️ Nota de Infraestructura:** Al ser un entorno de demostración, la instancia utiliza una IP dinámica. Si el enlace superior no carga, por favor consulta el repositorio más tarde para obtener la IP actualizada.
 
 ---
 
-## 📋 Descripción del Proyecto
+## 🎯 Alcance y Preguntas Sugeridas
 
-El análisis de manuales normativos en la banca suele ser un proceso manual, lento y propenso a errores humanos. Este proyecto automatiza dicha tarea utilizando una arquitectura **RAG (Retrieval-Augmented Generation)** avanzada.
+Para optimizar costos de inferencia y asegurar el cumplimiento, el agente cuenta con **Guardrails estrictos**: responde *únicamente* preguntas relacionadas con la Política de Crédito de DummyBank. Cualquier otro tema recibirá la respuesta: *"La información no consta en el manual."*
 
-A diferencia de un chatbot estándar, este sistema implementa un **Agente con uso de herramientas (Tool Calling)**, lo que le permite "razonar" cuándo consultar el documento y cuándo aplicar lógica deductiva, reduciendo las alucinaciones a cero.
+**Prueba el agente con estas consultas:**
 
-## 🛠️ Tecnologías Clave
+* **Matriz de Riesgo:** *"Soy un cliente con score de 720. ¿Cuál es mi tasa y monto máximo?"*
+* **Excepciones:** *"Tengo score 640 pero soy cliente hace 6 años sin atrasos. ¿Aplico a alguna excepción?"*
+* **Cumplimiento (AML):** *"Quiero solicitar $150,000 MXN. ¿Qué documentos de lavado de dinero necesito?"*
+* **Requisitos:** *"¿Cuál es la edad mínima y el ingreso requerido?"*
 
+---
+
+## 🛠️ Stack Tecnológico y Arquitectura
+
+El sistema ha evolucionado de un prototipo en Notebook a una aplicación contenerizada en la nube:
+
+* **Infraestructura:** AWS EC2 (t3.small / 30GB EBS / Ubuntu Server).
+* **Frontend:** Streamlit (Interfaz de chat interactiva con manejo de sesiones).
 * **Orquestación:** LangChain (Implementación de *OpenAI Tools Agent*).
 * **LLM:** GPT-4o (Configurado con `temperature=0` para determinismo financiero).
-* **Base Vectorial:** ChromaDB (Persistencia local).
-* **Embeddings:** Hugging Face (`all-MiniLM-L6-v2`) para eficiencia y privacidad.
+* **Base Vectorial:** ChromaDB (Persistencia local en servidor).
 * **Ingeniería de Datos:** `RecursiveCharacterTextSplitter` optimizado para tablas financieras.
 
 ---
 
-## ⚙️ Metodología y Arquitectura
+## ⚙️ Metodología de RAG
 
 El flujo de trabajo se divide en 4 etapas críticas para asegurar la precisión bancaria:
 
-1.  **Ingesta de Alta Precisión:**
-    * Se implementó un filtro de caracteres (`len > 10`) para evitar la pérdida de celdas pequeñas en tablas numéricas (ej. "18.2%").
-2.  **Búsqueda Híbrida (MMR):**
-    * Se sustituyó la búsqueda por similitud simple por **MMR (Maximal Marginal Relevance)**. Esto permite recuperar contextos diversos simultáneamente (ej. reglas de lavado de dinero en la pág. 4 y tasas de interés en la pág. 1) sin saturar la ventana de contexto.
-3.  **Razonamiento del Agente:**
-    * El agente evalúa condiciones lógicas complejas, como la aprobación de excepciones basada en antigüedad vs. score.
-4.  **Safety & Guardrails:**
-    * Implementación de *Negative Testing*: El agente está programado para rechazar solicitudes de productos fuera de su dominio (ej. Hipotecas) explícitamente.
-
+1.  **Ingesta de Alta Precisión:** Filtro de caracteres (`len > 10`) para evitar la pérdida de celdas pequeñas en tablas numéricas.
+2.  **Búsqueda Híbrida (MMR):** Uso de *Maximal Marginal Relevance* para recuperar contextos diversos (ej. reglas AML vs. tablas de tasas) sin saturar la ventana de contexto.
+3.  **Razonamiento del Agente:** Evaluación de condiciones lógicas complejas (ej. aprobación de excepciones por antigüedad).
+4.  **Safety & Guardrails:** Implementación de *Negative Testing* para rechazar solicitudes fuera de dominio (ej. Hipotecas).
 
 ---
 
-## 📊 Casos de Prueba (Unit Tests)
+## 📦 Dependencias Principales
 
-El sistema ha superado las siguientes pruebas de validación lógica:
+El entorno de producción utiliza las siguientes librerías clave (ver `requirements.txt` para lista completa):
 
-| Caso de Prueba | Input del Usuario | Resultado del Agente | Estado |
-| :--- | :--- | :--- | :--- |
-| **Extracción Tabular** | "Score 720" | Tasa 18.2% / Monto $300k | ✅ Pasó |
-| **Lógica de Excepción** | "Score 640 + 6 años antigüedad" | Aprobado (Requiere firma Gerente) | ✅ Pasó |
-| **Cumplimiento AML** | "Préstamo de $150,000" | Requiere Declaración de Origen de Fondos | ✅ Pasó |
-| **Lógica Negativa** | "Solicito Hipoteca" | "Información no consta en manual" | ✅ Pasó |
+```text
+streamlit>=1.30.0
+langchain>=0.1.0
+langchain-openai>=0.1.0
+langchain-chroma>=0.1.0
+chromadb>=0.4.24
+sentence-transformers>=2.7.0
+pypdf>=4.0.0
+python-dotenv>=1.0.0
 
 ---
 
