@@ -75,6 +75,7 @@ chromadb>=0.4.24
 sentence-transformers>=2.7.0
 pypdf>=4.0.0
 python-dotenv>=1.0.0
+```
 
 ---
 
